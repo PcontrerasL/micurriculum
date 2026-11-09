@@ -299,7 +299,24 @@ async function main() {
     await page.keyboard.press("Escape");
     assert.equal(await page.locator("#menu-toggle").getAttribute("aria-expanded"), "false");
 
-    for (const id of ["opportunity-dialog", "contact-dialog", "personal-dialog", "studies-dialog", "experience-dialog", "qr-dialog", "linkedin-dialog"]) {
+    const linkedInURL = "https://www.linkedin.com/in/paulina-angelica-contreras-levio-46616969/";
+    const linkedIn = page.locator('.social-links a:has(.icon--linkedin)');
+    assert.equal(await linkedIn.getAttribute("href"), linkedInURL);
+    assert.equal(await linkedIn.getAttribute("target"), "_blank");
+    assert.equal(await linkedIn.getAttribute("rel"), "noopener noreferrer");
+    assert.equal(await page.locator("#linkedin-dialog").count(), 0);
+    await context.route(linkedInURL, (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>Intercepted LinkedIn profile</title><p>Navigation test only.</p>" }));
+    const originalSocialURL = page.url();
+    const [profileTab] = await Promise.all([context.waitForEvent("page"), linkedIn.click()]);
+    await profileTab.waitForLoadState();
+    assert.equal(profileTab.url(), linkedInURL);
+    assert.equal(await profileTab.evaluate(() => window.opener), null);
+    assert.equal(page.url(), originalSocialURL);
+    assert.equal(await page.locator("dialog[open]").count(), 0);
+    await profileTab.close();
+    await context.unroute(linkedInURL);
+
+    for (const id of ["opportunity-dialog", "contact-dialog", "personal-dialog", "studies-dialog", "experience-dialog", "qr-dialog"]) {
       const trigger = page.locator(`[data-open-dialog="${id}"]`);
       const originalURL = page.url();
       const originalPageCount = context.pages().length;
@@ -611,7 +628,7 @@ async function main() {
     assert.deepEqual(await noObserverPage.locator("[data-count]").allTextContents(), ["3", "6", "6"]);
     await fallbackContext.close();
 
-    console.log(JSON.stringify({ result: "PASS", responsiveConfigurations: widths.length * 4, branding: "uppercase PC", lightTheme: "warm ivory canvas and richer card/counter surfaces verified; dark palette unchanged", compactScale: "heading sizes and counter typography unchanged", screenSections: "two screen groups; counters and cards still share one screen", socialRow: "compact like the counter row at every tested width", footer: "compact height limits verified on mobile, tablet and desktop", gallery: "photo-free modal from navbar and footer; mobile menu, keyboard operation and focus restoration verified", personal: `no scrolling or clipping in ${personalViewports.length * 4} viewport/language/theme combinations; full justified profile, four contact fields and seven skills preserved`, contact: "Conversemos opens an internal modal, not a blank page/tab; copy success, denied clipboard and unavailable clipboard paths verified without altering the OS clipboard", introAlignment: "right-aligned in both languages at every width", pdfDownload: "exact supplied PDF filename and bytes verified at the root and a GitHub Pages-style repository subpath", counterAnimation: "repeated visible count-up verified; no threshold jitter or overlapping frames; interrupted animation, sticky header, print and reduced-motion recovery covered", qr: `four explicitly labelled text fields verified in the original and rendered QR; no modal scrolling in ${qrViewports.length * 2} language/viewport combinations; separate vCard download retained`, dialogs: 8, themes: "persisted", languages: "persisted", accessibility: "no automated WCAG A/AA violations in light, dark or open gallery/QR/contact/opportunity/personal modals", runtimeErrors: errors.length, failedRequests: failedRequests.length, externalRuntimeRequests: externalRequests.length, fileURL: "verified", screenshots }, null, 2));
+    console.log(JSON.stringify({ result: "PASS", responsiveConfigurations: widths.length * 4, branding: "uppercase PC", lightTheme: "warm ivory canvas and richer card/counter surfaces verified; dark palette unchanged", compactScale: "heading sizes and counter typography unchanged", screenSections: "two screen groups; counters and cards still share one screen", socialRow: "compact like the counter row at every tested width", linkedin: "supplied HTTPS profile opens in a safe new tab without the placeholder modal; provider navigation intercepted", footer: "compact height limits verified on mobile, tablet and desktop", gallery: "photo-free modal from navbar and footer; mobile menu, keyboard operation and focus restoration verified", personal: `no scrolling or clipping in ${personalViewports.length * 4} viewport/language/theme combinations; full justified profile, four contact fields and seven skills preserved`, contact: "Conversemos opens an internal modal, not a blank page/tab; copy success, denied clipboard and unavailable clipboard paths verified without altering the OS clipboard", introAlignment: "right-aligned in both languages at every width", pdfDownload: "exact supplied PDF filename and bytes verified at the root and a GitHub Pages-style repository subpath", counterAnimation: "repeated visible count-up verified; no threshold jitter or overlapping frames; interrupted animation, sticky header, print and reduced-motion recovery covered", qr: `four explicitly labelled text fields verified in the original and rendered QR; no modal scrolling in ${qrViewports.length * 2} language/viewport combinations; separate vCard download retained`, dialogs: 7, themes: "persisted", languages: "persisted", accessibility: "no automated WCAG A/AA violations in light, dark or open gallery/QR/contact/opportunity/personal modals", runtimeErrors: errors.length, failedRequests: failedRequests.length, externalRuntimeRequests: externalRequests.length, fileURL: "verified", screenshots }, null, 2));
   } finally {
     await browser.close();
     if (deploymentServer) await new Promise((resolve) => deploymentServer.close(resolve));

@@ -169,10 +169,7 @@ window.CV_TRANSLATIONS = {
     "opportunity.openedWeb": "Continúa en WhatsApp Web para revisar y enviar tu propuesta.",
     "opportunity.greeting": "Hola, Paulina:",
     "opportunity.messageIntro": "Me gustaría presentarte una oportunidad profesional.",
-    "opportunity.messageEnd": "¿Te interesaría conversar sobre esta propuesta?",
-    "linkedin.title": "Conectemos profesionalmente",
-    "linkedin.description": "El enlace al perfil de LinkedIn estará disponible próximamente. Mientras tanto, puedes contactarme por correo o WhatsApp.",
-    "linkedin.email": "Escríbeme un correo"
+    "opportunity.messageEnd": "¿Te interesaría conversar sobre esta propuesta?"
   },
   en: {
     "meta.title": "Paulina Contreras | Curriculum Vitae",
@@ -342,9 +339,6 @@ window.CV_TRANSLATIONS = {
     "opportunity.openedWeb": "Continue in WhatsApp Web to review and send your proposal.",
     "opportunity.greeting": "Hello, Paulina:",
     "opportunity.messageIntro": "I would like to share a professional opportunity with you.",
-    "opportunity.messageEnd": "Would you be interested in discussing this proposal?",
-    "linkedin.title": "Let's connect professionally",
-    "linkedin.description": "The LinkedIn profile link will be available soon. In the meantime, you can reach me by email or WhatsApp.",
-    "linkedin.email": "Send me an email"
+    "opportunity.messageEnd": "Would you be interested in discussing this proposal?"
   }
 };

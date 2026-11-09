@@ -48,7 +48,17 @@ test("every detail and media control opens an existing accessible dialog", () =>
   for (const match of html.matchAll(/aria-labelledby="([^"]+)"/g)) {
     assert.ok(ids.includes(match[1]));
   }
-  assert.equal((html.match(/<dialog /g) || []).length, 8);
+  assert.equal((html.match(/<dialog /g) || []).length, 7);
+});
+
+test("the LinkedIn social action opens the supplied profile instead of a placeholder dialog", () => {
+  const link = html.match(/<a class="social-link" href="https:\/\/www\.linkedin\.com\/in\/paulina-angelica-contreras-levio-46616969\/"[^>]*>[\s\S]*?<\/a>/)?.[0];
+  assert.ok(link, "The confirmed LinkedIn profile link is missing");
+  assert.match(link, /target="_blank"/);
+  assert.match(link, /rel="noopener noreferrer"/);
+  assert.match(link, /class="icon icon--linkedin" aria-hidden="true"/);
+  assert.match(link, /data-i18n="a11y.newTab"/);
+  assert.doesNotMatch(html, /linkedin-dialog|linkedin\.description/);
 });
 
 test("English and Spanish have exactly the same translation keys", () => {
