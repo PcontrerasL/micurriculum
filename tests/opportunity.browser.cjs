@@ -37,6 +37,8 @@ async function main() {
   const continuation = page.locator("#opportunity-continue");
   const webFallback = page.locator("#opportunity-web-fallback");
   const review = page.locator('#opportunity-form button[type="submit"]');
+  const sparkles = page.locator(".opportunity-form-sparkles");
+  const mainSparkle = sparkles.locator(".opportunity-sparkle--main");
 
   async function closeDialog() {
     if (await dialog.evaluate((element) => element.open)) await page.keyboard.press("Escape");
@@ -77,6 +79,10 @@ async function main() {
     assert.equal(page.url(), originalURL);
     assert.equal(context.pages().length, 1);
     assert.ok(await dialog.evaluate((element) => element.open));
+    assert.equal(await page.locator(".opportunity-draft-badge").count(), 0);
+    assert.equal(await sparkles.getAttribute("aria-hidden"), "true");
+    assert.equal(await sparkles.evaluate((element) => element.tabIndex), -1);
+    assert.equal(await sparkles.evaluate((element) => getComputedStyle(element).pointerEvents), "none");
     assert.deepEqual(await Promise.all([company.inputValue(), role.inputValue(), description.inputValue()]), ["", "", ""]);
     assert.equal(await continuation.getAttribute("aria-disabled"), "true");
     assert.equal(await continuation.getAttribute("href"), null);
@@ -103,11 +109,18 @@ async function main() {
             viewport: innerWidth
           }));
           assert.ok(layout.document <= width && layout.width <= width - 30 && layout.scroll <= layout.client + 1, `Opportunity modal overflows: ${JSON.stringify(layout)}`);
+          assert.ok(await sparkles.evaluate((element) => {
+            const art = element.getBoundingClientRect();
+            const title = element.previousElementSibling.getBoundingClientRect();
+            const heading = element.parentElement.getBoundingClientRect();
+            return art.right <= heading.right + 1 && (art.left >= title.right + 4 || art.top >= title.bottom);
+          }), "Decorative sparkles must not overlap the heading or exceed the form");
         }
         for (const action of [review, continuation]) {
           await verifyGreenAction(action);
           await verifyActionMotion(action, false);
         }
+        assert.equal(await mainSparkle.evaluate((element) => getComputedStyle(element).animationName), "none");
         assert.equal(await company.getAttribute("placeholder"), language === "es" ? "Nombre de la empresa" : "Company name");
         await page.addScriptTag({ path: require.resolve("axe-core/axe.min.js") });
         const audit = await page.evaluate(async () => (await axe.run(document, { runOnly: { type: "tag", values: ["wcag2a", "wcag2aa", "wcag21aa", "best-practice"] } })).violations.map(({ id, nodes }) => ({ id, nodes: nodes.map((node) => node.target) })));
@@ -153,6 +166,22 @@ async function main() {
     await verifyActionMotion(continuation, false);
     await page.emulateMedia({ reducedMotion: "no-preference" });
     await page.waitForFunction(() => getComputedStyle(document.getElementById("opportunity-continue")).animationName === "opportunity-ready");
+    assert.equal(await mainSparkle.evaluate((element) => getComputedStyle(element).animationName), "opportunity-sparkle-float");
+    assert.equal(await sparkles.locator(".opportunity-sparkle--top").evaluate((element) => getComputedStyle(element).animationName), "opportunity-sparkle-twinkle");
+    const decoration = await mainSparkle.evaluate((element) => {
+      const animation = element.getAnimations().find((item) => item.animationName === "opportunity-sparkle-float");
+      animation.pause();
+      animation.currentTime = 0;
+      const firstTransform = getComputedStyle(element).transform;
+      const firstBox = element.parentElement.getBoundingClientRect();
+      animation.currentTime = 1800;
+      const secondTransform = getComputedStyle(element).transform;
+      const secondBox = element.parentElement.getBoundingClientRect();
+      animation.play();
+      return { firstTransform, secondTransform, stable: firstBox.width === secondBox.width && firstBox.height === secondBox.height && firstBox.left === secondBox.left && firstBox.top === secondBox.top };
+    });
+    assert.notEqual(decoration.firstTransform, decoration.secondTransform);
+    assert.ok(decoration.stable, "Sparkle motion must not move the form layout");
     for (const action of [review, continuation]) {
       await verifyActionMotion(action, true);
       await verifyGreenAction(action);
@@ -183,6 +212,9 @@ async function main() {
     assert.deepEqual(readyAudit, [], `Enabled opportunity accessibility: ${JSON.stringify(readyAudit)}`);
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.waitForFunction(() => getComputedStyle(document.getElementById("opportunity-continue")).animationName === "none");
+    assert.equal(await mainSparkle.evaluate((element) => getComputedStyle(element).animationName), "none");
+    assert.equal(await sparkles.evaluate((element) => getComputedStyle(element, "::before").animationName), "none");
+    assert.ok(await sparkles.isVisible(), "Reduced motion must keep the static decoration visible");
     for (const action of [review, continuation]) await verifyActionMotion(action, false);
     assert.equal(await opener.locator(".footer-contact-arrow").evaluate((element) => getComputedStyle(element).animationName), "none");
     await page.emulateMedia({ reducedMotion: "no-preference" });

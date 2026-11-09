@@ -13,7 +13,12 @@
 #opportunity-form { min-width: 0; margin: 0; }
 .opportunity-form-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; margin-bottom: 1.25rem; }
 .opportunity-form-heading h3 { font-family: var(--sans); font-size: 0.85rem; font-weight: 600; }
-.opportunity-draft-badge { padding: 0.3rem 0.5rem; border: 1px solid var(--accent-faint); border-radius: 4px; color: var(--accent); background: var(--surface-accent); font-size: 0.56rem; line-height: 1.5; }
+.opportunity-form-sparkles { position: relative; display: block; width: 44px; height: 40px; flex: 0 0 auto; color: var(--accent); pointer-events: none; user-select: none; }
+.opportunity-form-sparkles::before { position: absolute; inset: -6px; content: ""; border-radius: 50%; background: radial-gradient(ellipse, color-mix(in srgb, var(--accent) 24%, transparent), transparent 72%); opacity: 0.75; }
+.opportunity-form-sparkles .icon { position: absolute; transform-origin: center; }
+.opportunity-sparkle--main { top: 8px; left: 4px; width: 28px; height: 28px; filter: drop-shadow(0 0 4px color-mix(in srgb, var(--accent) 30%, transparent)); }
+.opportunity-sparkle--top { top: 0; right: 2px; width: 11px; height: 11px; opacity: 0.8; }
+.opportunity-sparkle--bottom { right: 1px; bottom: 2px; width: 8px; height: 8px; opacity: 0.7; }
 #opportunity-form label { margin-bottom: 0.4rem; color: var(--ink); font-size: 0.74rem; font-weight: 500; }
 #opportunity-form input, #opportunity-form textarea { height: auto; padding: 0.6rem 0.7rem; margin: 0 0 1rem; border-color: var(--line); color: var(--ink); background: var(--page); font-family: var(--sans); font-size: 0.8rem; line-height: 1.6; }
 #opportunity-form input:focus, #opportunity-form textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--pico-primary-focus); }
@@ -53,8 +58,24 @@
   .opportunity-message-panel { padding: 0.75rem; }
 }
 @media screen and (prefers-reduced-motion: no-preference) {
+  .opportunity-sparkle--main { animation: opportunity-sparkle-float 3.6s ease-in-out infinite; }
+  .opportunity-sparkle--top { animation: opportunity-sparkle-twinkle 2.8s ease-in-out 0.45s infinite; }
+  .opportunity-sparkle--bottom { animation: opportunity-sparkle-twinkle 3.2s ease-in-out 1.2s infinite; }
+  .opportunity-form-sparkles::before { animation: opportunity-sparkle-glow 3.6s ease-in-out infinite; }
   .opportunity-action:not(:disabled):not([aria-disabled="true"]) { animation: opportunity-ready 2.8s ease-in-out infinite; }
   .opportunity-action:not(:disabled):not([aria-disabled="true"])::before { animation: opportunity-sheen 4.8s ease-in-out infinite; }
+}
+@keyframes opportunity-sparkle-float {
+  0%, 100% { transform: translateY(1px) rotate(-6deg); }
+  50% { transform: translateY(-2px) rotate(6deg); }
+}
+@keyframes opportunity-sparkle-twinkle {
+  0%, 100% { opacity: 0.45; transform: scale(0.75); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+@keyframes opportunity-sparkle-glow {
+  0%, 100% { opacity: 0.55; transform: scale(0.9); }
+  50% { opacity: 0.95; transform: scale(1.08); }
 }
 @keyframes opportunity-ready {
   0%, 100% { box-shadow: 0 0 0 0 var(--opportunity-glow-soft), 0 4px 12px -7px var(--opportunity-glow); }

@@ -139,6 +139,17 @@ test("both opportunity actions share green effects only when enabled and motion 
   assert.match(opportunityCSS, /@keyframes opportunity-sheen/);
 });
 
+test("the opportunity form uses decorative sparkles instead of a draft-save-looking badge", () => {
+  const heading = html.match(/<div class="opportunity-form-heading">[\s\S]*?<\/div>/)[0];
+  assert.match(heading, /class="opportunity-form-sparkles" aria-hidden="true"/);
+  assert.equal((heading.match(/icon--sparkle/g) || []).length, 3);
+  assert.doesNotMatch(heading, /<button|tabindex|role="button"|Borrador local|opportunity\.draft/);
+  assert.equal(translations.es["opportunity.draft"], undefined);
+  assert.equal(translations.en["opportunity.draft"], undefined);
+  assert.match(read("css/opportunity.css"), /\.opportunity-form-sparkles\s*\{[^}]*pointer-events:\s*none/);
+  assert.match(read("css/opportunity.css"), /@keyframes opportunity-sparkle-float/);
+});
+
 test("the footer invitation retains its accessible label with a decorative animated accent", () => {
   assert.match(html, /class="footer-contact-label" data-i18n="footer.talk"/);
   assert.match(html, /class="footer-contact-arrow" aria-hidden="true"/);

@@ -11,10 +11,10 @@
     <link rel="preload" href="assets/fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="assets/fonts/dm-serif-latin.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="stylesheet" href="css/vendor/pico.min.css">
-    <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/opportunity.css">
+    <link rel="stylesheet" href="css/styles.css?v=opportunity-sparkles">
+    <link rel="stylesheet" href="css/opportunity.css?v=opportunity-sparkles">
     <script src="js/theme.js"></script>
-    <script src="js/translations.js?v=android-return" defer></script>
+    <script src="js/translations.js?v=opportunity-sparkles" defer></script>
     <script src="js/whatsapp.js" defer></script>
     <script src="js/app.js" defer></script>
     <script src="js/opportunity.js?v=android-return" defer></script>
@@ -184,7 +184,7 @@
         </ol>
         <div class="opportunity-layout">
           <form id="opportunity-form" method="dialog" novalidate>
-            <div class="opportunity-form-heading"><h3 data-i18n="opportunity.formTitle">Cuéntame la oportunidad</h3><span class="opportunity-draft-badge" data-i18n="opportunity.draft">Borrador local</span></div>
+            <div class="opportunity-form-heading"><h3 data-i18n="opportunity.formTitle">Cuéntame la oportunidad</h3><span class="opportunity-form-sparkles" aria-hidden="true"><span class="icon icon--sparkle opportunity-sparkle--main"></span><span class="icon icon--sparkle opportunity-sparkle--top"></span><span class="icon icon--sparkle opportunity-sparkle--bottom"></span></span></div>
             <label for="opportunity-company" data-i18n="opportunity.company">Empresa u organización</label>
             <input id="opportunity-company" type="text" maxlength="100" required autocomplete="off" placeholder="Nombre de la empresa" data-i18n-placeholder="opportunity.companyPlaceholder">
             <label for="opportunity-role" data-i18n="opportunity.role">Cargo o proyecto</label>

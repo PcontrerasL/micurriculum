@@ -149,6 +149,7 @@ img { display: block; max-width: 100%; height: auto; }
 .icon--close { --icon: url("../img/icons/close.svg"); }
 .icon--qr { --icon: url("../img/icons/qr.svg"); }
 .icon--image { --icon: url("../img/icons/image.svg"); }
+.icon--sparkle { --icon: url("../img/icons/sparkle.svg"); }
 
 .site-header { position: sticky; top: 0; z-index: 20; padding: 0; border-bottom: 1px solid var(--line); background: var(--header); backdrop-filter: blur(18px); }
 #contenido { padding: 0; }
