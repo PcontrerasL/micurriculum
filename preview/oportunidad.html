@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es" data-theme="light">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#f4eee9">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Presentar una oportunidad · Vista previa</title>
+    <link rel="icon" href="../img/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="../css/vendor/pico.min.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="opportunity-preview.css">
+    <script src="../js/theme.js"></script>
+    <script src="../js/translations.js" defer></script>
+    <script src="opportunity-preview.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="brand" href="../index.html"><span class="brand-monogram" aria-hidden="true">PC<span>.</span></span><span class="brand-text">Curriculum <span>Vitae</span></span></a>
+        <span class="preview-badge" data-i18n="preview.badge">Vista previa · Sin envíos</span>
+      </div>
+    </header>
+
+    <main class="shell preview-stage">
+      <p class="eyebrow" data-i18n="preview.stageEyebrow">Una propuesta para tu enlace</p>
+      <h1 data-i18n="preview.stageTitle">Recibir oportunidades con contexto.</h1>
+      <p data-i18n="preview.explanation">No es un buscador. Es una ficha para que quien visite tu currículum te presente una oportunidad y revise el mensaje antes de contactarte.</p>
+      <button class="button button--primary" id="open-preview" type="button" aria-haspopup="dialog" data-i18n="preview.open">Ver demostración</button>
+      <p class="preview-stage-note" data-i18n="preview.unchanged">Esta vista previa no modifica tu currículum actual.</p>
+      <a class="button button--quiet" href="../index.html" data-i18n="preview.back">Volver al currículum</a>
+    </main>
+
+    <dialog id="opportunity-dialog" aria-labelledby="opportunity-title" aria-describedby="preview-disclaimer">
+      <article class="opportunity-preview">
+        <header class="dialog-header">
+          <div class="preview-toolbar">
+            <p class="eyebrow" data-i18n="preview.badge">Vista previa · Sin envíos</p>
+            <div class="preview-tools">
+              <button class="utility-button" id="preview-language" type="button" aria-label="Cambiar a inglés">ES / EN</button>
+              <button class="utility-button" id="preview-theme" type="button" aria-label="Activar modo oscuro"><span class="icon icon--moon" aria-hidden="true"></span></button>
+              <button class="utility-button" type="button" data-preview-close aria-label="Cerrar" data-i18n-aria="common.close"><span class="icon icon--close" aria-hidden="true"></span></button>
+            </div>
+          </div>
+          <h2 id="opportunity-title" data-i18n="preview.title">Presentar una oportunidad</h2>
+          <p class="preview-subtitle" data-i18n="preview.subtitle">No busca ofertas: prepara un mensaje con la oportunidad que quieres presentarme.</p>
+        </header>
+
+        <ol class="preview-steps" aria-label="Pasos de la propuesta" data-i18n-aria="preview.stepsLabel">
+          <li data-preview-step="1" aria-current="step"><span class="step-number" aria-hidden="true">01</span><span data-i18n="preview.step1">La oportunidad</span></li>
+          <li data-preview-step="2"><span class="step-number" aria-hidden="true">02</span><span data-i18n="preview.step2">Revisar mensaje</span></li>
+          <li data-preview-step="3"><span class="step-number" aria-hidden="true">03</span><span data-i18n="preview.step3">Contactar</span></li>
+        </ol>
+
+        <div class="opportunity-layout">
+          <form id="opportunity-form" method="dialog" novalidate>
+            <div class="preview-form-heading"><h3 data-i18n="preview.formTitle">Cuéntame la oportunidad</h3><span id="preview-data-badge" class="preview-data-badge">Ejemplo editable</span></div>
+            <label for="opportunity-company" data-i18n="preview.company">Empresa u organización</label>
+            <input id="opportunity-company" type="text" maxlength="100" required autocomplete="off">
+            <label for="opportunity-role" data-i18n="preview.role">Cargo o proyecto</label>
+            <input id="opportunity-role" type="text" maxlength="140" required autocomplete="off">
+            <label for="opportunity-description" data-i18n="preview.description">Descripción de la oportunidad</label>
+            <textarea id="opportunity-description" rows="4" minlength="15" maxlength="800" required></textarea>
+            <div class="preview-form-actions"><button class="button button--primary" type="submit"><span data-i18n="preview.review">Revisar propuesta</span><span class="icon icon--arrow-up" aria-hidden="true"></span></button><button class="button button--quiet" id="reset-preview" type="button" data-i18n="preview.reset">Restablecer ejemplo</button></div>
+          </form>
+
+          <div class="preview-message-panel">
+            <p class="eyebrow" data-i18n="preview.messageEyebrow">Así llegaría tu propuesta</p>
+            <h3 id="preview-message-title" data-i18n="preview.messageTitle">Un mensaje, todo el contexto.</h3>
+            <p class="preview-recipient"><span class="icon icon--user" aria-hidden="true"></span><span data-i18n="preview.recipient">Para Paulina Contreras</span></p>
+            <div class="preview-message" id="preview-message" tabindex="0" role="region" aria-labelledby="preview-message-title"></div>
+            <button class="button button--primary preview-continue" id="preview-continue" type="button" disabled aria-describedby="preview-disclaimer"><span class="icon icon--whatsapp" aria-hidden="true"></span><span data-i18n="preview.continue">Continuar en WhatsApp</span><span class="preview-demo-tag">Demo</span></button>
+            <p class="preview-disclaimer" id="preview-disclaimer" data-i18n="preview.disclaimer">Modo demostración: no se abre WhatsApp ni se envía información.</p>
+            <p class="preview-status" id="preview-status" role="status"></p>
+          </div>
+        </div>
+        <footer class="preview-modal-footer"><span><span class="icon icon--check" aria-hidden="true"></span><span data-i18n="preview.local">La propuesta permanece en esta vista previa.</span></span><button class="button button--quiet" type="button" data-preview-close data-i18n="common.close">Cerrar</button></footer>
+      </article>
+    </dialog>
+  </body>
+</html>
