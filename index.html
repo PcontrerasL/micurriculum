@@ -14,9 +14,10 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/opportunity.css">
     <script src="js/theme.js"></script>
-    <script src="js/translations.js" defer></script>
+    <script src="js/translations.js?v=android-return" defer></script>
+    <script src="js/whatsapp.js" defer></script>
     <script src="js/app.js" defer></script>
-    <script src="js/opportunity.js" defer></script>
+    <script src="js/opportunity.js?v=android-return" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#contenido" data-i18n="a11y.skip">Saltar al contenido</a>
@@ -199,7 +200,7 @@
             <div class="opportunity-message" id="opportunity-message" tabindex="0" role="region" aria-labelledby="opportunity-message-title"></div>
             <a class="button button--primary opportunity-action opportunity-continue" id="opportunity-continue" role="link" aria-disabled="true" tabindex="-1" aria-describedby="opportunity-disclaimer"><span class="icon icon--whatsapp" aria-hidden="true"></span><span data-i18n="opportunity.continue">Continuar en WhatsApp</span><span class="sr-only" data-i18n="a11y.opensWhatsApp"> (abre la aplicación de WhatsApp)</span></a>
             <a class="whatsapp-web-fallback" id="opportunity-web-fallback" role="link" aria-disabled="true" tabindex="-1" target="_blank" rel="noopener noreferrer"><span data-i18n="contact.webFallback">Si no se abre la app, usar WhatsApp Web</span><span class="sr-only" data-i18n="a11y.newTab"> (se abre en otra pestaña)</span></a>
-            <p class="opportunity-disclaimer" id="opportunity-disclaimer" data-i18n="opportunity.disclaimer">Abrirá la aplicación de WhatsApp con el borrador. Tú decides cuándo enviarlo.</p>
+            <p class="opportunity-disclaimer" id="opportunity-disclaimer" data-i18n="opportunity.disclaimer" data-android-i18n="opportunity.androidDisclaimer">Abrirá la aplicación de WhatsApp con el borrador. Tú decides cuándo enviarlo.</p>
             <p class="opportunity-status" id="opportunity-status" role="status"></p>
           </div>
         </div>
@@ -215,7 +216,7 @@
           <h2 id="contact-dialog-title" data-i18n="hero.contact">Conversemos</h2>
         </header>
         <div class="dialog-content contact-dialog-content">
-          <p data-i18n="contact.instructions">Puedes abrir la aplicación de WhatsApp o copiar mi correo para usar tu servicio de correo habitual.</p>
+          <p data-i18n="contact.instructions" data-android-i18n="contact.androidInstructions">Puedes abrir la aplicación de WhatsApp o copiar mi correo para usar tu servicio de correo habitual.</p>
           <a class="button button--primary" id="contact-whatsapp" href="whatsapp://send/?phone=56964194547"><span class="icon icon--whatsapp" aria-hidden="true"></span><span data-i18n="contact.whatsapp">Escribir por WhatsApp</span><span class="sr-only" data-i18n="a11y.opensWhatsApp"> (abre la aplicación de WhatsApp)</span></a>
           <a class="whatsapp-web-fallback" id="contact-whatsapp-web" href="https://wa.me/56964194547" target="_blank" rel="noopener noreferrer"><span data-i18n="contact.webFallback">Si no se abre la app, usar WhatsApp Web</span><span class="sr-only" data-i18n="a11y.newTab"> (se abre en otra pestaña)</span></a>
           <label class="contact-email-label" for="contact-email" data-i18n="contact.email">Correo electrónico</label>

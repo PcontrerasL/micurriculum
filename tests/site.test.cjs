@@ -71,7 +71,7 @@ test("English and Spanish have exactly the same translation keys", () => {
 });
 
 test("every visible and accessible translation reference exists", () => {
-  for (const match of html.matchAll(/data-i18n(?:-aria|-alt|-content|-placeholder)?="([^"]+)"/g)) {
+  for (const match of html.matchAll(/data-(?:android-)?i18n(?:-aria|-alt|-content|-placeholder)?="([^"]+)"/g)) {
     assert.ok(translations.es[match[1]], `Unknown Spanish key ${match[1]}`);
     assert.ok(translations.en[match[1]], `Unknown English key ${match[1]}`);
   }
@@ -122,10 +122,11 @@ test("the footer opens the approved real opportunity form, not the demo or mailt
   assert.match(dialog, /id="opportunity-form" method="dialog"/);
   assert.match(dialog, /id="opportunity-continue"[^>]*aria-disabled="true"/);
   assert.doesNotMatch(dialog, /\bvalue="|Empresa de ejemplo|Example company|preview\/|Modo demostración/);
-  assert.match(read("js/opportunity.js"), /whatsapp:\/\/send\/\?phone=56964194547&text=\$\{encodedMessage\}/);
-  assert.match(read("js/opportunity.js"), /https:\/\/wa\.me\/56964194547\?text=\$\{encodedMessage\}/);
-  assert.match(read("js/opportunity.js"), /encodeURIComponent\(reviewedMessage\)/);
+  assert.match(read("js/opportunity.js"), /CV_WHATSAPP\.prepareLinks\(continueLink, webFallback, reviewedMessage\)/);
+  assert.match(read("js/whatsapp.js"), /encodeURIComponent\(message\)/);
+  assert.match(read("js/whatsapp.js"), /intent:\/\/send\/\?/);
   assert.doesNotMatch(read("js/opportunity.js"), /localStorage|sessionStorage|\bfetch\(|XMLHttpRequest|innerHTML/);
+  assert.doesNotMatch(read("js/whatsapp.js"), /localStorage|sessionStorage|\bfetch\(|XMLHttpRequest|innerHTML|setTimeout|window\.open/);
 });
 
 test("both opportunity actions share green effects only when enabled and motion is permitted", () => {

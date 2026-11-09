@@ -58,9 +58,7 @@
     if (!validate()) return;
     reviewedMessage = buildMessage();
     output.textContent = reviewedMessage;
-    const encodedMessage = encodeURIComponent(reviewedMessage);
-    continueLink.href = `whatsapp://send/?phone=56964194547&text=${encodedMessage}`;
-    webFallback.href = `https://wa.me/56964194547?text=${encodedMessage}`;
+    window.CV_WHATSAPP.prepareLinks(continueLink, webFallback, reviewedMessage);
     continuationLinks.forEach((link) => {
       link.setAttribute("aria-disabled", "false");
       link.removeAttribute("tabindex");
