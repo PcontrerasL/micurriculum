@@ -27,7 +27,7 @@ test("all JavaScript and CSS is external, without inline event handlers", () => 
 test("every local HTML and CSS asset exists", () => {
   for (const match of html.matchAll(/(?:src|href)="([^"#]+)"/g)) {
     if (/^(?:https?:|mailto:|tel:|whatsapp:)/.test(match[1])) continue;
-    assert.ok(fs.existsSync(path.join(root, decodeURIComponent(match[1]))), `Missing ${match[1]}`);
+    assert.ok(fs.existsSync(path.join(root, decodeURIComponent(match[1].split("?")[0]))), `Missing ${match[1]}`);
   }
   for (const match of css.matchAll(/url\("([^"]+)"\)/g)) {
     assert.ok(fs.existsSync(path.resolve(root, "css", match[1])), `Missing ${match[1]}`);
@@ -150,7 +150,8 @@ test("the compact QR dialog hides redundant contact text without changing its vC
   const dialog = html.match(/<dialog id="qr-dialog"[\s\S]*?<\/dialog>/)[0];
   assert.doesNotMatch(dialog, /qr-role|data-i18n="qr.role"|Ingeniero|paucontrerasl@gmail\.com|tel:|mailto:/);
   assert.match(dialog, /class="qr-large"/);
-  assert.match(dialog, /src="img\/contact-details\.svg"/);
+  assert.match(dialog, /src="img\/contact-details\.svg\?v=utf8-eci-26"/);
+  assert.match(html, /src="img\/contact-details\.png\?v=utf8-eci-26"/);
   assert.match(read("img/contact-details.svg"), /shape-rendering="crispEdges"/);
   assert.match(dialog, /href="assets\/paulina-contreras\.vcf"/);
   assert.match(read("assets/paulina-contreras.vcf"), /EMAIL;TYPE=INTERNET:paucontrerasl@gmail.com/);

@@ -52,6 +52,7 @@ async function main() {
   const qr = PNG.sync.read(fs.readFileSync(path.join(root, "img/contact-details.png")));
   const decoded = jsQR(new Uint8ClampedArray(qr.data), qr.width, qr.height);
   assert.ok(decoded, "The contact QR must be machine-readable");
+  assert.deepEqual(decoded.chunks[0], { type: "eci", assignmentNumber: 26 }, "The QR must explicitly declare UTF-8 before the contact data");
   assert.equal(decoded.data.replace(/\r\n/g, "\n"), fs.readFileSync(path.join(root, "assets/paulina-contact.txt"), "utf8").trimEnd());
   assert.match(decoded.data, /^Nombre: Paulina Angélica Contreras Levio$/m);
   assert.match(decoded.data, /^Teléfono: \+56 9 6419 4547$/m);
@@ -472,6 +473,7 @@ async function main() {
         const renderedImage = PNG.sync.read(await page.locator("#qr-dialog .qr-large").screenshot());
         const renderedContact = jsQR(new Uint8ClampedArray(renderedImage.data), renderedImage.width, renderedImage.height);
         assert.ok(renderedContact, `Rendered QR is not readable at ${viewport.width}x${viewport.height}`);
+        assert.deepEqual(renderedContact.chunks[0], { type: "eci", assignmentNumber: 26 }, "The rendered SVG must preserve the UTF-8 declaration");
         assert.match(renderedContact.data, /^Correo: paucontrerasl@gmail\.com$/m);
         assert.equal(renderedContact.data.replace(/\r\n/g, "\n"), decoded.data.replace(/\r\n/g, "\n"), "The compact SVG QR must show all four explicit contact fields");
         if (language === "es" && ((viewport.width === 390 && viewport.height === 844) || (viewport.width === 844 && viewport.height === 390) || viewport.width === 1366)) {
